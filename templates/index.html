@@ -21,11 +21,10 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="index.html">About</a></li>
                             <li class="nav-item"><a class="nav-link" href="#current">Current</a></li>
                             <li class="nav-item"><a class="nav-link" href="#bitcoinvs">BTCvs</a></li>
-                            <li class="nav-item"><a class="nav-link" href="pricing.html">Historical</a></li>
-                            <li class="nav-item"><a class="nav-link" href="faq.html">News</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#historical">Historical</a></li>
+                            <li class="nav-item"><a class="nav-link" href="news">News</a></li>
                         </ul>
                     </div>
                 </div>
@@ -39,7 +38,7 @@
                                 <h1 class="display-5 fw-bolder text-white mb-2">Welcome to BitcoinVS!</h1>
                                 <p class="lead fw-normal text-white-50 mb-4">Compare any asset to bitcoin, calculate dollar cost averaging (DCA) scenarios, and view historical data and current news!</p>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                                    <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">Get Started</a>
+                                    <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#bitcoinvs">Get Started</a>
                                     <a class="btn btn-outline-light btn-lg px-4" href="https://github.com/JGGHalfhide/BitcoinVS" target="_blank">View Source Code</a>
                                 </div>
                             </div>
@@ -48,6 +47,7 @@
                     </div>
                 </div>
             </header>
+
             <!-- BTC ticker-->
 <div class="d-flex justify-content-center align-items-center" style="margin-top: 0px; background-color: #FFA500;">
     <h2 class="fw-bolder mx-3">Current Bitcoin Price: ${{ current_price }}</h2>
@@ -97,6 +97,42 @@
                 </div>
              </section>
         </main>
+
+        <!-- historical section-->
+            <section id="historical">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 justify-content-center">
+                        <div class="col-lg-8 col-xl-6">
+                            <div class="text-center">
+                                <h2 class="fw-bolder">Historical BTC Price Data</h2>
+                                <p class="lead fw-normal text-muted mb-5">BTC historical price panda df.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        <!-- News section-->
+            <section id="news">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 justify-content-center">
+                        <div class="col-lg-8 col-xl-6">
+                            <div class="text-center">
+                                <h2 class="fw-bolder">Latest Bitcoin News</h2>
+                                <!-- function for retrieving 3 latest links-->
+                                <div class="article-container bg-light p-3 mb-3">
+                                {% for article in articles %}
+                        <h3>{{ article['title'] }}</h3>
+                        <p>{{ article['description'] }}</p>
+                        <a href="{{ article['link'] }}" target="_blank">{{ article['link'] }}</a>
+                        <hr>
+                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
         <!-- Footer-->
         <footer class="bg-dark py-4 mt-auto">
