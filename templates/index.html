@@ -77,15 +77,36 @@
                             </div>
                         </div>
                     </div>
-                    <!-- form-->
+                    <!-- Search box -->
+                    <div class="d-flex justify-content-center">
+<form id="searchForm" action="{{ url_for('home') }}" method="post">
+    <label for="searchTerm">Find company ticker:</label>
+    <input type="text" id="searchTerm" name="searchTerm" placeholder="Enter company name">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+                    </div>
+<!-- Display search results -->
+<div class="d-flex justify-content-center">
+    {% if search_results %}
+        <ul>
+            {% for result in search_results %}
+                <li>{{ result["Company Name"] }} ({{ result["Ticker"] }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <!-- Display a message when there are no search results -->
+        <p>No matching companies found.</p>
+    {% endif %}
+</div>
+                      <!-- BTCvs form-->
                     <div class="d-flex justify-content-center">
                     <form id="userInputForm">
     <label for="inputValue1">Asset name:</label>
     <input type="text" id="inputValue1" name="inputValue1" placeholder="Enter stock ticker" required><br>
-
+<br>
     <label for="inputValue2">Amount invested:</label>
-    <input type="number" id="inputValue2" name="inputValue2" placeholder="Enter number only"required><br>
-
+    <input type="text" id="inputValue2" name="inputValue2" pattern="[0-9]+" placeholder="Enter number only"required><br>
+<br>
     <label for="inputValue2">Start date:</label>
     <input type="date" id="inputValue23" name="inputValue23" min="2010-01-01" required><br>
     <br>
@@ -118,7 +139,7 @@
                     <div class="row gx-5 justify-content-center">
                         <div class="col-lg-8 col-xl-6">
                             <div class="text-center">
-                                <h2 class="fw-bolder">Latest Bitcoin News</h2>
+                                <h2 class="fw-bolder">Recent Bitcoin News</h2>
                                 <!-- function for retrieving 3 latest links-->
                                 <div class="article-container bg-light p-3 mb-3">
                                 {% for article in articles %}
@@ -147,6 +168,7 @@
         <!-- Core theme JS-->
         <script src="static/js/scripts.js"></script>
     </body>
+</main>
 </html>
 
 

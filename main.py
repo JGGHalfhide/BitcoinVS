@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests
 import os
+import csv
 
 app = Flask(__name__)
 
@@ -16,9 +17,24 @@ current_price = round(response.json()['rate'], 2)
 formatted_price = "{:,.2f}".format(current_price)
 
 
+# get tickers from company name and ticker csv
+def search_companies(csv_file, search_term):
+    results = []
+
+    with open(csv_file, mode='r') as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip the header row if present
+
+        for row in reader:
+            ticker, company_name = row
+            if search_term.lower() in company_name.lower():
+                results.append({'Ticker': ticker, 'Company Name': company_name})
+    return results
+
+
 # get 3 bitcoin articles from the last 30 days
 current_date = datetime.now()
-one_month_ago = current_date - timedelta(days=30)
+one_month_ago = current_date - timedelta(days=14)
 formatted_date = one_month_ago.strftime('%Y-%m-%d')
 NEWS_KEY = os.environ.get("NEWS_KEY")
 news_url = f"https://api.marketaux.com/v1/news/all?search=bitcoin&filter_entities=true&published_after={formatted_date}&language=en&api_token={NEWS_KEY}"
@@ -33,9 +49,15 @@ for article in news_data['data']:
     }
     article_list.append(article_dict)
 
-@app.route("/")
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template("index.html", current_price=formatted_price, articles=article_list)
+    search_results = None  # Initialize search results
+
+    if request.method == 'POST':
+        search_term = request.form.get('searchTerm')
+        search_results = search_companies('static/csv/stocks.csv', search_term)
+
+    return render_template("index.html", current_price=formatted_price, articles=article_list, search_results=search_results)
 
 
 """ Note: in chrome developer tools, use: Console > document.body.contentEditable=true 
