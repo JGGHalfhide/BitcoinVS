@@ -13,9 +13,11 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="static/css/styles.css" rel="stylesheet" />
     </head>
+    <main>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
             <!-- Navigation-->
+            <section id="top">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container px-5">
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -25,11 +27,12 @@
                             <li class="nav-item"><a class="nav-link" href="#bitcoinvs">BTCvs</a></li>
                             <li class="nav-item"><a class="nav-link" href="#dcacalculator">DCA Calculator</a></li>
                             <li class="nav-item"><a class="nav-link" href="#historical">Historical</a></li>
-                            <li class="nav-item"><a class="nav-link" href="news">News</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#news">News</a></li>
                         </ul>
                     </div>
                 </div>
             </nav>
+                </section>
             <!-- Header-->
             <header class="bg-dark py-5">
                 <div class="container px-5">
@@ -101,7 +104,7 @@
 </div>
                       <!-- BTCvs form-->
                     <div class="d-flex justify-content-center">
-                    <form id="userInputForm">
+                    <form id="btcvsform">
     <label for="inputValue1">Asset name:</label>
     <input type="text" id="inputValue1" name="inputValue1" placeholder="Enter stock ticker" required><br>
 <br>
@@ -112,27 +115,51 @@
     <input type="date" id="inputValue23" name="inputValue23" min="2010-01-01" required><br>
     <br>
                         <div class="text-center">
-    <button type="button" class="btn btn-secondary">Compare</button>
+    <button type="submit" class="btn btn-secondary">Compare</button>
                         </div>
 </form>
                 </div>
                 </div>
              </section>
-        </main>
 
         <!-- DCA calculator section-->
-            <section id="dcacalculator">
-                <div class="container px-5 my-5">
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-lg-8 col-xl-6">
-                            <div class="text-center">
-                                <h2 class="fw-bolder">DCA Calculator</h2>
-                                <p class="lead fw-normal text-muted mb-5">Dollar cost averaging (DCA) calculator to show ROI, dollar, and BTC returns for given timespan and capital invested.</p>
-                            </div>
-                        </div>
+    <section id="dcacalculator" style="margin-bottom: -20px;">
+        <div class="container px-5 my-5">
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-8 col-xl-6">
+                    <div class="text-center">
+                        <h2 class="fw-bolder">DCA Calculator</h2>
+                        <p class="lead fw-normal text-muted mb-5">Dollar cost averaging (DCA) calculator to show ROI, dollar, and BTC returns for given timespan and capital invested.</p>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
+    </section>
+
+    <!-- DCA calculator form-->
+    <div class="d-flex justify-content-center">
+        <form id="dcacalculatorform" style="text-align: left; max-width: 400px; width: 100%; margin-top: -10px;">
+            <label for="inputValue4">Start date:</label>
+            <input type="date" id="inputValue4" name="inputValue4" min="2010-01-01" required><br>
+<br>
+            <label for="inputValue5">End date:</label>
+            <input type="date" id="inputValue5" name="inputValue5" min="2010-01-02" required><br>
+<br>
+            <label for="inputValue6">USD invested:</label>
+            <input type="number" id="inputValue6" name="inputValue6" placeholder="Enter number only" required><br>
+<br>
+            <label for="dropdown">Frequency:</label>
+            <select id="dropdown" name="selectedOption">
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="lumpsum">Lump sum</option>
+            </select><br>
+<br>
+            <div style="text-align: center;">
+                <button type="submit" class="btn btn-secondary">Calculate</button>
+            </div>
+        </form>
+    </div>
 
         <!-- historical section-->
             <section id="historical">
@@ -174,7 +201,10 @@
         <footer class="bg-dark py-4 mt-auto">
             <div class="container px-5">
                 <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><a class="link-light small" href="https://github.com/JGGHalfhide/BitcoinVS" target="_blank">View Source Code</a></div>
+                    <div class="col-auto">
+                        <a class="link-light small" href="#top">Go to top</a>
+                        <a class="link-light small" href="https://github.com/JGGHalfhide/BitcoinVS" target="_blank">View Source Code</a>
+                    </div>
                 </div>
             </div>
         </footer>
