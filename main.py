@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from flask import Flask, render_template, request
 import requests
 import os
-import csv
+from functions import search_companies
 
 app = Flask(__name__)
 
@@ -15,21 +15,6 @@ headers = {
 response = requests.get(url, headers=headers)
 current_price = round(response.json()['rate'], 2)
 formatted_price = "{:,.2f}".format(current_price)
-
-
-# get tickers from company name and ticker csv
-def search_companies(csv_file, search_term):
-    results = []
-
-    with open(csv_file, mode='r') as file:
-        reader = csv.reader(file)
-        next(reader)  # Skip the header row if present
-
-        for row in reader:
-            ticker, company_name = row
-            if search_term.lower() in company_name.lower():
-                results.append({'Ticker': ticker, 'Company Name': company_name})
-    return results
 
 
 # get 3 bitcoin articles from the last 30 days
@@ -49,6 +34,7 @@ for article in news_data['data']:
     }
     article_list.append(article_dict)
 
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     search_results = None  # Initialize search results
@@ -59,9 +45,6 @@ def home():
 
     return render_template("index.html", current_price=formatted_price, articles=article_list, search_results=search_results)
 
-
-""" Note: in chrome developer tools, use: Console > document.body.contentEditable=true 
-to be able to edit the webpage in the browser! """
 
 if __name__ == "__main__":
     app.run(debug=True)
