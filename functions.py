@@ -81,7 +81,7 @@ def lump_sum(stock_dict, investment: int):
     """Calculates a lump sum investment's results for a given timespan"""
     shares_purchased = investment / list(stock_dict.values())[0]
     final_dollar_value = round(list(stock_dict.values())[-1] * shares_purchased, 2)
-    gain_or_loss = final_dollar_value - investment
+    gain_or_loss = round(final_dollar_value - investment, 2)
     roi = round(((final_dollar_value - investment) / investment) * 100, 2)
 
     return final_dollar_value, gain_or_loss, roi, shares_purchased

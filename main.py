@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from flask import Flask, render_template, request
 import requests
 import os
-from functions import search_companies
+from functions import search_companies, get_stock_data, format_stock_data, dca_return, lump_sum
 
 app = Flask(__name__)
 
@@ -38,12 +38,26 @@ for article in news_data['data']:
 @app.route('/', methods=['GET', 'POST'])
 def home():
     search_results = None  # Initialize search results
+    result_message = None  # Initialize the result of DCA
 
     if request.method == 'POST':
         search_term = request.form.get('searchTerm')
-        search_results = search_companies('static/csv/stocks.csv', search_term)
-
-    return render_template("index.html", current_price=formatted_price, articles=article_list, search_results=search_results)
+        if search_term:
+            search_results = search_companies('static/csv/stocks.csv', search_term)
+        else:
+            start_date_str = request.form.get('inputValue5')
+            end_date_str = request.form.get('inputValue6')
+            # Format dates to "yyyy-mm-dd"
+            start_date = datetime.strptime(start_date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
+            end_date = datetime.strptime(end_date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
+            invested_amount = int(request.form.get('inputValue7'))
+            investment_frequency = request.form.get('selectedOption')
+            data = get_stock_data(start_date, end_date, ticker="BTC-USD", interval='1wk')
+            data_dict = format_stock_data(data)
+            if investment_frequency == 'lump':
+                final_dollar_value, gain_or_loss, roi, shares_purchased = lump_sum(data_dict, invested_amount)
+                result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}"
+    return render_template("index.html", current_price=formatted_price, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, result_message=result_message)
 
 
 if __name__ == "__main__":

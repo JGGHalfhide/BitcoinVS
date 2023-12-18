@@ -141,7 +141,7 @@
 
     <!-- DCA calculator form-->
     <div class="d-flex justify-content-center">
-        <form id="dcacalculatorform" style="text-align: left; max-width: 400px; width: 100%; margin-top: -10px;">
+        <form id="dcaForm" action="{{ url_for('home') }}" method="post">
             <label for="inputValue5">Start date:</label>
             <input type="date" id="inputValue5" name="inputValue5" min="2010-01-01" required><br>
 <br>
@@ -153,10 +153,10 @@
 <br>
             <label for="dropdown">Investment frequency:</label>
             <select id="dropdown" name="selectedOption">
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-                <option value="lumpsum">Lump sum</option>
+                <option value="1d">Daily</option>
+                <option value="1wk">Weekly</option>
+                <option value="1mo">Monthly</option>
+                <option value="lump">Lump sum</option>
             </select><br>
 <br>
             <div style="text-align: center;">
@@ -165,7 +165,14 @@
         </form>
     </div>
 
+<!-- Display result message -->
+<div class="d-flex justify-content-center">
+    {% if result_message %}
+        <p style="text-align: center; margin-top: 20px;">{{ result_message }}</p>
+    {% endif %}
+</div>
         <!-- historical section-->
+
             <section id="historical">
                 <div class="container px-5 my-5">
                     <div class="row gx-5 justify-content-center">
