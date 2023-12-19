@@ -59,7 +59,7 @@ def dca_return(stock_dict, investment_amount: int):
     """Calculates investing results for the given amount and time span"""
     # initializes invested amount and shares owned
     investment = 0
-    total_shares = 0
+    shares_purchased = 0
 
     for date, price in stock_dict.items():
         # Calculate the number of shares that can be bought with dca amount
@@ -67,13 +67,13 @@ def dca_return(stock_dict, investment_amount: int):
 
         # Update investment and total shares
         investment += investment_amount
-        total_shares += shares_bought
+        shares_purchased += shares_bought
 
-    final_dollar_value = round(list(stock_dict.values())[-1] * total_shares, 2)
+    final_dollar_value = round(list(stock_dict.values())[-1] * shares_purchased, 2)
     final_gain_or_loss = round(final_dollar_value - investment, 2)
     roi = round(((final_dollar_value - investment) / investment) * 100, 2)
 
-    return investment, total_shares, final_dollar_value, final_gain_or_loss, roi
+    return shares_purchased, final_dollar_value, final_gain_or_loss, roi
 
 
 # lump sum investment results function

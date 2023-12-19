@@ -168,7 +168,12 @@
 <!-- Display result message -->
 <div class="d-flex justify-content-center">
     {% if result_message %}
-        <p style="text-align: center; margin-top: 20px;">{{ result_message }}</p>
+        <p style="text-align: center; margin-top: 20px;">
+            {{ result_message | replace("Final dollar value:", "<strong>Final dollar value:</strong>") |
+               replace("USD return:", "<strong>USD return:</strong>") |
+               replace("Total BTC:", "<strong>Total BTC:</strong>") |
+               replace("ROI:", "<strong>ROI:</strong>") | safe }}
+        </p>
     {% endif %}
 </div>
         <!-- historical section-->
