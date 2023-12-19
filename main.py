@@ -52,13 +52,23 @@ def home():
             end_date = datetime.strptime(end_date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
             invested_amount = int(request.form.get('inputValue7'))
             investment_frequency = request.form.get('selectedOption')
-            data = get_stock_data(start_date, end_date, ticker="BTC-USD", interval='1d')
-            data_dict = format_stock_data(data)
+            daily_data = get_stock_data(start_date, end_date, ticker="BTC-USD", interval='1d')
+            daily_data_dict = format_stock_data(daily_data)
+            weekly_data = get_stock_data(start_date, end_date, ticker="BTC-USD", interval='1wk')
+            weekly_data_dict = format_stock_data(weekly_data)
+            monthly_data = get_stock_data(start_date, end_date, ticker="BTC-USD", interval='1mo')
+            monthly_data_dict = format_stock_data(monthly_data)
             if investment_frequency == 'lump':
-                final_dollar_value, gain_or_loss, roi, shares_purchased = lump_sum(data_dict, invested_amount)
+                final_dollar_value, gain_or_loss, roi, shares_purchased = lump_sum(daily_data_dict, invested_amount)
                 result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
             elif investment_frequency == '1d':
-                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(data_dict, invested_amount)
+                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(daily_data_dict, invested_amount)
+                result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${final_gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
+            elif investment_frequency == '1wk':
+                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(weekly_data_dict, invested_amount)
+                result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${final_gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
+            elif investment_frequency == '1mo':
+                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(monthly_data_dict, invested_amount)
                 result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${final_gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
 
     return render_template("index.html", current_price=formatted_price, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, result_message=result_message)
