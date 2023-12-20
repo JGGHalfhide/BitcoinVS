@@ -104,7 +104,7 @@
 </div>
                       <!-- BTCvs form-->
                     <div class="d-flex justify-content-center">
-                    <form id="btcvsform">
+                    <form id="btcvsform" action="{{ url_for('home') }}" method="post">
     <label for="inputValue1">Asset name:</label>
     <input type="text" id="inputValue1" name="inputValue1" placeholder="Enter stock ticker" required><br>
 <br>
@@ -124,7 +124,14 @@
                 </div>
                 </div>
              </section>
-
+<!-- Display BTC vs result message -->
+<div class="d-flex justify-content-center">
+    {% if btc_vs_results %}
+        <p style="text-align: center; margin-top: 20px;">
+            {{ btc_vs_results }}
+        </p>
+    {% endif %}
+</div>
         <!-- DCA calculator section-->
     <section id="dcacalculator" style="margin-bottom: -20px;">
         <div class="container px-5 my-5">
@@ -165,11 +172,11 @@
         </form>
     </div>
 
-<!-- Display result message -->
+<!-- Display DCA result message -->
 <div class="d-flex justify-content-center">
-    {% if result_message %}
+    {% if dca_result_message %}
         <p style="text-align: center; margin-top: 20px;">
-            {{ result_message | replace("Final dollar value:", "<strong>Final dollar value:</strong>") |
+            {{ dca_result_message | replace("Final dollar value:", "<strong>Final dollar value:</strong>") |
                replace("USD return:", "<strong>USD return:</strong>") |
                replace("Total BTC:", "<strong>Total BTC:</strong>") |
                replace("ROI:", "<strong>ROI:</strong>") | safe }}

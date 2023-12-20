@@ -38,13 +38,14 @@ for article in news_data['data']:
 @app.route('/', methods=['GET', 'POST'])
 def home():
     search_results = None  # Initialize search results
-    result_message = None  # Initialize the result of DCA
+    btc_vs_results = None  # Initialize the result of BTC vs form
+    dca_result_message = None  # Initialize the result of DCA
 
     if request.method == 'POST':
-        search_term = request.form.get('searchTerm')
-        if search_term:
+        if "searchTerm" in request.form:
+            search_term = request.form.get('searchTerm')
             search_results = search_companies('static/csv/stocks.csv', search_term)
-        else:
+        elif "inputValue5" in request.form:
             start_date_str = request.form.get('inputValue5')
             end_date_str = request.form.get('inputValue6')
             # Format dates to "yyyy-mm-dd"
@@ -60,18 +61,38 @@ def home():
             monthly_data_dict = format_stock_data(monthly_data)
             if investment_frequency == 'lump':
                 final_dollar_value, gain_or_loss, roi, shares_purchased = lump_sum(daily_data_dict, invested_amount)
-                result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
+                dca_result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
             elif investment_frequency == '1d':
                 shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(daily_data_dict, invested_amount)
-                result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${final_gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
+                dca_result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${final_gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
             elif investment_frequency == '1wk':
                 shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(weekly_data_dict, invested_amount)
-                result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${final_gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
+                dca_result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${final_gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
             elif investment_frequency == '1mo':
                 shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(monthly_data_dict, invested_amount)
-                result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${final_gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
+                dca_result_message = f"Final dollar value: ${final_dollar_value} | USD return: ${final_gain_or_loss} | Total BTC: {round(shares_purchased, 6)} | ROI: {roi}%"
+        elif "inputValue1" in request.form:
+            ticker = request.form.get('inputValue1')
+            stock_start_date_str = request.form.get('inputValue3')
+            stock_end_date_str = request.form.get('inputValue4')
+            # Format dates to "yyyy-mm-dd"
+            stock_start_date_formatted = datetime.strptime(stock_start_date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
+            stock_end_date_formatted = datetime.strptime(stock_end_date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
+            # Get the investment amount and the stock price data for the given ticker
+            investment = int(request.form.get('inputValue2'))
+            stock_data = get_stock_data(stock_start_date_formatted, stock_end_date_formatted, ticker=ticker, interval='1d')
+            stock_data_dict = format_stock_data(stock_data)
+            # Run the stock through the lump sum function
+            stock_results = lump_sum(stock_data_dict, investment)
+            # Get the BTC results for the same time period and investment
+            btc_data = get_stock_data(stock_start_date_formatted, stock_end_date_formatted, ticker="BTC-USD", interval='1d')
+            btc_data_dict = format_stock_data(btc_data)
+            btc_results = lump_sum(btc_data_dict, investment)
+            # Use a list to store the stock and BTC results
+            results = [stock_results, btc_results]
+            btc_vs_results = f"Results for the given time period and investment:\nBitcoin's USD return was ${results[1][1]} vs {ticker}'s ${results[0][1]}\nBitcoin's ROI was {results[1][2]}% vs {ticker}'s {results[0][2]}%\nBitcoin's final USD value was ${results[1][0]} vs {ticker}'s ${results[0][0]}"
 
-    return render_template("index.html", current_price=formatted_price, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, result_message=result_message)
+    return render_template("index.html", current_price=formatted_price, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, dca_result_message=dca_result_message, btc_vs_results=btc_vs_results)
 
 
 if __name__ == "__main__":
