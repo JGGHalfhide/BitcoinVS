@@ -127,9 +127,12 @@
 <!-- Display BTC vs result message -->
 <div class="d-flex justify-content-center">
     {% if btc_vs_results %}
-        <p style="text-align: center; margin-top: 20px;">
-            {{ btc_vs_results }}
-        </p>
+        <div style="text-align: center; margin-top: 20px;">
+            <h4 class="fw-bolder">Results for the given time period and investment:</h4>
+            <p style="margin-top: 20px;">
+                {{ btc_vs_results | safe }}
+            </p>
+        </div>
     {% endif %}
 </div>
         <!-- DCA calculator section-->
@@ -175,12 +178,12 @@
 <!-- Display DCA result message -->
 <div class="d-flex justify-content-center">
     {% if dca_result_message %}
-        <p style="text-align: center; margin-top: 20px;">
-            {{ dca_result_message | replace("Final dollar value:", "<strong>Final dollar value:</strong>") |
-               replace("USD return:", "<strong>USD return:</strong>") |
-               replace("Total BTC:", "<strong>Total BTC:</strong>") |
-               replace("ROI:", "<strong>ROI:</strong>") | safe }}
-        </p>
+        <div style="text-align: center; margin-top: 20px;">
+            <h4 class="fw-bolder">Results for the given time period and investment:</h4>
+            <p style="margin-top: 20px;">
+                {{ dca_result_message | safe }}
+            </p>
+        </div>
     {% endif %}
 </div>
         <!-- historical section-->
@@ -229,6 +232,9 @@
                     </div>
                     <div>
                         <a class="link-light small" href="https://github.com/JGGHalfhide/BitcoinVS" target="_blank">View Source Code</a>
+                    </div>
+                    <div class="col-auto">
+                        <p class="lead fw-normal text-white-50 mb-4">BitcoinVS &copy;</a>
                     </div>
                 </div>
             </div>
