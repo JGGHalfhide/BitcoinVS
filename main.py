@@ -2,19 +2,12 @@ from datetime import datetime, timedelta
 from flask import Flask, render_template, request
 import requests
 import os
-from functions import search_companies, get_stock_data, format_stock_data, dca_return, lump_sum
+from functions import current_price, search_companies, get_stock_data, format_stock_data, dca_return, lump_sum
 
 app = Flask(__name__)
 
 # get current BTC price for top of page
-COIN_KEY = os.environ.get("COIN_KEY")
-url = "https://rest.coinapi.io/v1/exchangerate/BTC/USD"
-headers = {
-    "X-CoinAPI-Key": f'{COIN_KEY}'
-}
-response = requests.get(url, headers=headers)
-current_price = round(response.json()['rate'], 2)
-formatted_price = "{:,.2f}".format(current_price)
+current_price = current_price()
 
 
 # get 3 bitcoin articles from the last 30 days
@@ -116,7 +109,7 @@ def home():
                 f"Bitcoin's <strong>final USD value</strong> was ${results[1][0]} vs {ticker}'s ${results[0][0]}"
             )
 
-    return render_template("index.html", current_price=formatted_price, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, dca_result_message=dca_result_message, btc_vs_results=btc_vs_results)
+    return render_template("index.html", current_price=current_price, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, dca_result_message=dca_result_message, btc_vs_results=btc_vs_results)
 
 
 if __name__ == "__main__":

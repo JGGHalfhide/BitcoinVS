@@ -4,6 +4,19 @@ import pandas as pd
 from datetime import datetime
 
 
+# Most recent price function
+def current_price():
+    """Get price data for each minute of today and retrun the latest one"""
+    btc_data = yf.download(tickers="BTC-USD",
+                           period="1d",
+                           interval="1m",
+                           auto_adjust=True)
+    btc_prices = btc_data['High']
+    last_price = btc_prices.iloc[-1]
+
+    return round(last_price, 2)
+
+
 # ticker search bar function
 def search_companies(csv_file, search_term):
     """Take a company name and search a csv of companies/tickers to return the ticker symbol"""
@@ -85,4 +98,3 @@ def lump_sum(stock_dict, investment: int):
     roi = round(((final_dollar_value - investment) / investment) * 100, 2)
 
     return final_dollar_value, gain_or_loss, roi, shares_purchased
-
