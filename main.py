@@ -53,10 +53,10 @@ def home():
             monthly_data = get_stock_data(start_date, end_date, ticker="BTC-USD", interval='1mo')
             monthly_data_dict = format_stock_data(monthly_data)
             if investment_frequency == 'lump':
-                final_dollar_value, final_gain_or_loss, roi, shares_purchased = lump_sum(daily_data_dict, invested_amount)
+                formatted_final_dollar_value, formatted_gain_or_loss, roi, shares_purchased = lump_sum(daily_data_dict, invested_amount)
                 dca_result_message = (
-                    f"<strong>Final USD value:</strong> ${final_dollar_value}<br>"
-                    f"<strong>USD return:</strong> ${final_gain_or_loss}<br>"
+                    f"<strong>Final USD value:</strong> {formatted_final_dollar_value}<br>"
+                    f"<strong>USD return:</strong> {formatted_gain_or_loss}<br>"
                     f"<strong>Total BTC:</strong> {round(shares_purchased, 6)}<br>"
                     f"<strong>ROI:</strong> {roi}%"
                 )
@@ -104,9 +104,9 @@ def home():
             # Use a list to store the stock and BTC results
             results = [stock_results, btc_results]
             btc_vs_results = (
-                f"Bitcoin's <strong>USD return</strong> was ${results[1][1]} vs {ticker}'s ${results[0][1]}<br>"
+                f"Bitcoin's <strong>USD return</strong> was {results[1][1]} vs {ticker}'s {results[0][1]}<br>"
                 f"Bitcoin's <strong>ROI</strong> was {results[1][2]}% vs {ticker}'s {results[0][2]}%<br>"
-                f"Bitcoin's <strong>final USD value</strong> was ${results[1][0]} vs {ticker}'s ${results[0][0]}"
+                f"Bitcoin's <strong>final USD value</strong> was {results[1][0]} vs {ticker}'s {results[0][0]}"
             )
 
     return render_template("index.html", current_price=current_price, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, dca_result_message=dca_result_message, btc_vs_results=btc_vs_results)
