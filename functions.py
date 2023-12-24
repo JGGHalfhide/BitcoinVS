@@ -2,7 +2,72 @@ import csv
 import yfinance as yf
 import pandas as pd
 from datetime import datetime
+import plotly.graph_objects as go
 
+
+# Get BTC graph data function
+def btc_data(period="1d", interval="1m"):
+    data = yf.download(tickers="BTC-USD",
+    period=period,
+    interval=interval,
+    auto_adjust=True)
+    stock_prices = data['High']
+    return stock_prices
+
+
+# Graph the BTC data
+def btc_graph(stock_prices, period="1d"):
+    """Take BTC data and plot it to a line graph with plotly based on desired time interval"""
+    fig = go.Figure()
+    if period == "1d":
+        fig.add_trace(go.Scatter(x=stock_prices.index, y=stock_prices.values, mode='lines', name='BTC-USD Price'))
+        # Update layout and format y-axis
+        fig.update_layout(
+            title="Today's Bitcoin Price (1-minute intervals)",
+            xaxis_title='Time (GMT)',
+            yaxis_title='Price (USD)',
+            yaxis=dict(tickformat=",.2f")
+            )
+    elif period == "7d":
+        fig.add_trace(go.Scatter(x=stock_prices.index, y=stock_prices.values, mode='lines+markers', name='BTC-USD Daily Price'))
+        # Update layout and format y-axis
+        fig.update_layout(
+            title='Bitcoin Price (1 day intervals)',
+            xaxis_title='Day',
+            yaxis_title='Price (USD)',
+            yaxis=dict(tickformat=",.2f")
+            )
+    elif period == "1y":
+        fig.add_trace(
+            go.Scatter(x=stock_prices.index, y=stock_prices.values, mode='lines+markers', name='BTC-USD Monthly Price'))
+        # Update layout and format y-axis
+        fig.update_layout(
+            title='Bitcoin Price (1 month intervals)',
+            xaxis_title='Month',
+            yaxis_title='Price (USD)',
+            yaxis=dict(tickformat=",.2f",),
+            xaxis=dict(
+                tickmode='array',  # Set tick mode to array
+                tickvals=stock_prices.index.tolist(),  # Explicitly set tick values to include all months
+                ticktext=stock_prices.index.strftime('%B').tolist()  # Format tick labels to display month names
+            )
+        )
+    elif period == "10y":
+        fig.add_trace(go.Scatter(x=stock_prices.index, y=stock_prices.values, mode='lines+markers',
+                                 name='BTC-USD 10-Year Price'))
+        # Update layout and format y-axis
+        fig.update_layout(
+            title='Bitcoin Price (past 10 years)',
+            xaxis_title='Year',
+            yaxis_title='Price (USD)',
+            yaxis=dict(tickformat=",.2f"),
+            xaxis=dict(
+                tickmode='array',  # Set tick mode to array
+                tickvals=stock_prices.index[::12].tolist(),  # Set tick values to every 12th index to represent years
+                ticktext=stock_prices.index[::12].strftime('%Y').tolist()  # Format tick labels to display years
+            )
+        )
+    return fig
 
 # Most recent price function
 def current_price():

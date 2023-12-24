@@ -12,6 +12,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="static/css/styles.css" rel="stylesheet" />
+        <!-- Include Plotly's JavaScript library -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     </head>
     <main>
     <body class="d-flex flex-column h-100">
@@ -63,7 +65,10 @@
                         <div class="col-lg-8 col-xl-6">
                             <div class="text-center">
                                 <h2 class="fw-bolder">BTC at a Glance</h2>
-                                <p class="lead fw-normal text-muted mb-5">Intraday bitcoin price chart.</p>
+                                <p class="lead fw-normal text-muted mb-5">See BTC charts for daily, weekly, monthly, and all time price data.</p>
+                <div id="btc-graph" style="width: 100%; max-width: 1500px; margin: 0 auto;">
+                    {{ graph_html | safe }}  <!-- Render the Plotly figure here -->
+                </div>
                             </div>
                         </div>
                     </div>

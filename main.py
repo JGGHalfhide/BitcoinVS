@@ -2,13 +2,20 @@ from datetime import datetime, timedelta
 from flask import Flask, render_template, request
 import requests
 import os
-from functions import current_price, search_companies, get_stock_data, format_stock_data, dca_return, lump_sum
+from functions import current_price, search_companies, get_stock_data, format_stock_data, dca_return, lump_sum, btc_data, btc_graph
+import plotly.io as pio
+
 
 app = Flask(__name__)
 
 # get current BTC price for top of page
 current_price = current_price()
 
+
+# Get BTC data and create a graph for BTC at a glance section
+data = btc_data()
+fig = btc_graph(data, "1d")
+graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
 
 # get 3 bitcoin articles from the last 30 days
 current_date = datetime.now()
@@ -109,7 +116,7 @@ def home():
                 f"Bitcoin's <strong>final USD value</strong> was {results[1][0]} vs {ticker}'s {results[0][0]}"
             )
 
-    return render_template("index.html", current_price=current_price, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, dca_result_message=dca_result_message, btc_vs_results=btc_vs_results)
+    return render_template("index.html", current_price=current_price, graph_html=graph_html, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, dca_result_message=dca_result_message, btc_vs_results=btc_vs_results)
 
 
 if __name__ == "__main__":
