@@ -127,7 +127,7 @@
 <!-- Display BTC vs result message -->
 <div class="d-flex justify-content-center">
     {% if btc_vs_results %}
-        <div style="text-align: center; margin-top: 20px;">
+        <div style="text-align: center; margin-top: 20px; background-color: #f5f5f5; padding: 20px;">
             <h4 class="fw-bolder">Results for the given time period and investment:</h4>
             <p style="margin-top: 20px;">
                 {{ btc_vs_results | safe }}
@@ -178,7 +178,7 @@
 <!-- Display DCA result message -->
 <div class="d-flex justify-content-center">
     {% if dca_result_message %}
-        <div style="text-align: center; margin-top: 20px;">
+        <div style="text-align: center; margin-top: 20px; background-color: #f5f5f5; padding: 20px;">
             <h4 class="fw-bolder">Results for the given time period and investment:</h4>
             <p style="margin-top: 20px;">
                 {{ dca_result_message | safe }}
