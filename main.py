@@ -17,6 +17,7 @@ data = btc_data()
 fig = btc_graph(data, "1d")
 graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
 
+
 # get 3 bitcoin articles from the last 30 days
 current_date = datetime.now()
 one_month_ago = current_date - timedelta(days=14)

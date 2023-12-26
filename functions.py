@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 
 # Get BTC graph data function
 def btc_data(period="1d", interval="1m"):
+    """Get BTC price data for given intervals"""
     data = yf.download(tickers="BTC-USD",
     period=period,
     interval=interval,
@@ -69,17 +70,19 @@ def btc_graph(stock_prices, period="1d"):
         )
     return fig
 
+
 # Most recent price function
 def current_price():
-    """Get price data for each minute of today and retrun the latest one"""
+    """Get price data for each minute of today and return the latest one"""
     btc_data = yf.download(tickers="BTC-USD",
                            period="1d",
                            interval="1m",
                            auto_adjust=True)
     btc_prices = btc_data['High']
     last_price = btc_prices.iloc[-1]
+    formatted_price = "{:,.2f}".format(last_price)
 
-    return round(last_price, 2)
+    return formatted_price
 
 
 # ticker search bar function
@@ -166,4 +169,3 @@ def lump_sum(stock_dict, investment: int):
 
     return formatted_final_dollar_value, formatted_gain_or_loss, roi, shares_purchased
 
-    # formatted = f"-${abs(value)}" if value < 0 else f"${value}"
