@@ -57,22 +57,33 @@
 <div class="d-flex justify-content-center align-items-center" style="margin-top: 0px; background-color: #FFA500;">
     <h2 class="fw-bolder mx-3">Current Bitcoin Price: ${{ current_price }}</h2>
 </div>
-            <!-- Current BTC market section-->
-            <section id="charts">
-                <div class="container px-5 my-5">
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-lg-8 col-xl-6">
-                            <div class="text-center">
-                                <h2 class="fw-bolder">BTC at a Glance</h2>
-                                <p class="lead fw-normal text-muted mb-5">See BTC charts for daily, weekly, monthly, and all time price data.</p>
-                <div id="btc-graph" style="width: 100%; max-width: 1500px; margin: 0 auto;">
-                    {{ graph_html | safe }}  <!-- Render the Plotly figure here -->
-                </div>
-                            </div>
-                        </div>
+            <!-- BTC charts section -->
+<section id="charts">
+    <div class="container px-5 my-5">
+        <div class="row gx-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="text-center">
+                    <h2 class="fw-bolder">BTC Charts</h2>
+                    <p class="lead fw-normal text-muted mb-5">See BTC charts for daily, weekly, monthly, and all-time price data.</p>
+
+                    <!-- Toggle buttons for different intervals -->
+                    <div class="btn-group" role="group" aria-label="BTC Chart Toggle">
+                        <a href="/?interval=daily" class="btn btn-primary">Daily</a>
+                        <a href="/?interval=weekly" class="btn btn-secondary">Weekly</a>
+                        <a href="/?interval=monthly" class="btn btn-secondary">Monthly</a>
+                        <a href="/?interval=all" class="btn btn-secondary">All</a>
+                    </div>
+
+                    <!-- Plotly graph section -->
+                    <div id="btc-graph" style="width: 100%; max-width: 1500px; margin: 0 auto;">
+                        {{ graph_html | safe }}  <!-- Render the Plotly figure here -->
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
+    </div>
+</section>
+
 
             <!-- BTCvs section-->
              <section id="bitcoinvs">
