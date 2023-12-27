@@ -6,12 +6,12 @@ import plotly.graph_objects as go
 
 
 # Get BTC graph data function
-def btc_data(period="1d", interval="1m"):
+def btc_data_to_graph(period="1d", interval="1m"):
     """Get BTC price data for given intervals"""
     data = yf.download(tickers="BTC-USD",
-    period=period,
-    interval=interval,
-    auto_adjust=True)
+                       period=period,
+                       interval=interval,
+                       auto_adjust=True)
     stock_prices = data['High']
     return stock_prices
 
@@ -28,16 +28,17 @@ def btc_graph(stock_prices, period="1d"):
             xaxis_title='Time (GMT)',
             yaxis_title='Price (USD)',
             yaxis=dict(tickformat=",.2f")
-            )
+        )
     elif period == "7d":
-        fig.add_trace(go.Scatter(x=stock_prices.index, y=stock_prices.values, mode='lines+markers', name='BTC-USD Daily Price'))
+        fig.add_trace(
+            go.Scatter(x=stock_prices.index, y=stock_prices.values, mode='lines+markers', name='BTC-USD Daily Price'))
         # Update layout and format y-axis
         fig.update_layout(
             title='Bitcoin Price (1 day intervals)',
             xaxis_title='Day',
             yaxis_title='Price (USD)',
             yaxis=dict(tickformat=",.2f")
-            )
+        )
     elif period == "1y":
         fig.add_trace(
             go.Scatter(x=stock_prices.index, y=stock_prices.values, mode='lines+markers', name='BTC-USD Monthly Price'))
@@ -46,7 +47,7 @@ def btc_graph(stock_prices, period="1d"):
             title='Bitcoin Price (1 month intervals)',
             xaxis_title='Month',
             yaxis_title='Price (USD)',
-            yaxis=dict(tickformat=",.2f",),
+            yaxis=dict(tickformat=",.2f", ),
             xaxis=dict(
                 tickmode='array',  # Set tick mode to array
                 tickvals=stock_prices.index.tolist(),  # Explicitly set tick values to include all months
@@ -168,4 +169,3 @@ def lump_sum(stock_dict, investment: int):
     roi = round(((final_dollar_value - investment) / investment) * 100, 2)
 
     return formatted_final_dollar_value, formatted_gain_or_loss, roi, shares_purchased
-

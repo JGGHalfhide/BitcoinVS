@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from flask import Flask, render_template, request
 import requests
 import os
-from functions import current_price, search_companies, get_stock_data, format_stock_data, dca_return, lump_sum, btc_data, btc_graph
+from functions import current_price, search_companies, get_stock_data, format_stock_data, dca_return, lump_sum, btc_data_to_graph, btc_graph
 import plotly.io as pio
 
 
@@ -12,13 +12,13 @@ app = Flask(__name__)
 current_price = current_price()
 
 
-# Get BTC data and create a graph for BTC at a glance section
-data = btc_data()
-fig = btc_graph(data, "1d")
-graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
+# Get BTC data and create a graph for BTC graphs section
+# data = btc_data()
+# fig = btc_graph(data, "1d")
+# graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
 
 
-# get 3 bitcoin articles from the last 30 days
+# get 3 bitcoin articles from the last 14 days
 current_date = datetime.now()
 one_month_ago = current_date - timedelta(days=14)
 formatted_date = one_month_ago.strftime('%Y-%m-%d')
@@ -41,6 +41,25 @@ def home():
     search_results = None  # Initialize search results
     btc_vs_results = None  # Initialize the result of BTC vs form
     dca_result_message = None  # Initialize the result of DCA
+
+    # Get BTC data and create a default graph for BTC graphs section
+    data = btc_data_to_graph()
+    fig = btc_graph(data, "1d")
+    graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
+    # Get the desired graph for the specified time interval
+    interval = request.args.get('interval', default='daily', type=str)
+    if interval == 'weekly':
+        data = btc_data_to_graph(period="7d", interval="1d")
+        fig = btc_graph(data, "7d")
+        graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
+    elif interval == 'monthly':
+        data = btc_data_to_graph(period="1y", interval="1mo")
+        fig = btc_graph(data, "1y")
+        graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
+    elif interval == 'all':
+        data = btc_data_to_graph(period="10y", interval="1mo")
+        fig = btc_graph(data, "10y")
+        graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
 
     if request.method == 'POST':
         if "searchTerm" in request.form:
