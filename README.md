@@ -24,7 +24,7 @@ BitcoinVS is a comprehensive web application built with Flask for backend operat
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/BitcoinVS.git
+   git clone https://github.com/JGGHalfhide/BitcoinVS.git
    ```
 
 2. Navigate to the project directory:
@@ -55,7 +55,3 @@ Contributions are welcome! Please fork the repository, make changes, and submit 
 ## License:
 
 This project is licensed under the MIT License.
-
----
-
-Feel free to customize the content further based on specific details or additional sections you'd like to include!
