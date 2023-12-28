@@ -2,15 +2,14 @@ from datetime import datetime, timedelta
 from flask import Flask, render_template, request
 import requests
 import os
-from functions import current_price, search_companies, get_stock_data, format_stock_data, dca_return, lump_sum, btc_data_to_graph, btc_graph
+from functions import current_price, search_companies, get_stock_data, format_stock_data, dca_return, lump_sum, \
+    btc_data_to_graph, btc_graph
 import plotly.io as pio
-
 
 app = Flask(__name__)
 
 # get current BTC price for top of page
 current_price = current_price()
-
 
 # Get BTC data and create a graph for BTC graphs section
 # data = btc_data()
@@ -41,6 +40,12 @@ def home():
     search_results = None  # Initialize search results
     btc_vs_results = None  # Initialize the result of BTC vs form
     dca_result_message = None  # Initialize the result of DCA
+    ticker = ""  # Initialize variable for ticker to keep a placeholder after user submits BTCvs form
+    stock_start_date_formatted = ""  # Initialize variable for start date to keep a placeholder after user submits
+    # BTCvs form
+    stock_end_date_formatted = ""  # Initialize variable for end date to keep a placeholder after user submits BTCvs
+    # form
+    investment = ""  # Initialize variable for investment amount to keep a placeholder after user submits BTCvs form
 
     # Get BTC data and create a default graph for BTC graphs section
     data = btc_data_to_graph()
@@ -80,7 +85,8 @@ def home():
             monthly_data = get_stock_data(start_date, end_date, ticker="BTC-USD", interval='1mo')
             monthly_data_dict = format_stock_data(monthly_data)
             if investment_frequency == 'lump':
-                formatted_final_dollar_value, formatted_gain_or_loss, roi, shares_purchased = lump_sum(daily_data_dict, invested_amount)
+                formatted_final_dollar_value, formatted_gain_or_loss, roi, shares_purchased = lump_sum(daily_data_dict,
+                                                                                                       invested_amount)
                 dca_result_message = (
                     f"<strong>Final USD value:</strong> {formatted_final_dollar_value}<br>"
                     f"<strong>USD return:</strong> {formatted_gain_or_loss}<br>"
@@ -88,7 +94,8 @@ def home():
                     f"<strong>ROI:</strong> {roi}%"
                 )
             elif investment_frequency == '1d':
-                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(daily_data_dict, invested_amount)
+                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(daily_data_dict,
+                                                                                           invested_amount)
                 dca_result_message = (
                     f"<strong>Final USD value:</strong> ${final_dollar_value}<br>"
                     f"<strong>USD return:</strong> ${final_gain_or_loss}<br>"
@@ -96,7 +103,8 @@ def home():
                     f"<strong>ROI:</strong> {roi}%"
                 )
             elif investment_frequency == '1wk':
-                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(weekly_data_dict, invested_amount)
+                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(weekly_data_dict,
+                                                                                           invested_amount)
                 dca_result_message = (
                     f"<strong>Final USD value:</strong> ${final_dollar_value}<br>"
                     f"<strong>USD return:</strong> ${final_gain_or_loss}<br>"
@@ -104,7 +112,8 @@ def home():
                     f"<strong>ROI:</strong> {roi}%"
                 )
             elif investment_frequency == '1mo':
-                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(monthly_data_dict, invested_amount)
+                shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(monthly_data_dict,
+                                                                                           invested_amount)
                 dca_result_message = (
                     f"<strong>Final USD value:</strong> ${final_dollar_value}<br>"
                     f"<strong>USD return:</strong> ${final_gain_or_loss}<br>"
@@ -120,12 +129,14 @@ def home():
             stock_end_date_formatted = datetime.strptime(stock_end_date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
             # Get the investment amount and the stock price data for the given ticker
             investment = int(request.form.get('inputValue2'))
-            stock_data = get_stock_data(stock_start_date_formatted, stock_end_date_formatted, ticker=ticker, interval='1d')
+            stock_data = get_stock_data(stock_start_date_formatted, stock_end_date_formatted, ticker=ticker,
+                                        interval='1d')
             stock_data_dict = format_stock_data(stock_data)
             # Run the stock through the lump sum function
             stock_results = lump_sum(stock_data_dict, investment)
             # Get the BTC results for the same time period and investment
-            btc_data = get_stock_data(stock_start_date_formatted, stock_end_date_formatted, ticker="BTC-USD", interval='1d')
+            btc_data = get_stock_data(stock_start_date_formatted, stock_end_date_formatted, ticker="BTC-USD",
+                                      interval='1d')
             btc_data_dict = format_stock_data(btc_data)
             btc_results = lump_sum(btc_data_dict, investment)
             # Use a list to store the stock and BTC results
@@ -136,7 +147,10 @@ def home():
                 f"Bitcoin's <strong>final USD value</strong> was {results[1][0]} vs {ticker}'s {results[0][0]}"
             )
 
-    return render_template("index.html", current_price=current_price, graph_html=graph_html, articles=article_list, search_results=search_results, get_stock_data=get_stock_data, dca_result_message=dca_result_message, btc_vs_results=btc_vs_results)
+    return render_template("index.html", current_price=current_price, graph_html=graph_html, articles=article_list,
+                           search_results=search_results, get_stock_data=get_stock_data,
+                           dca_result_message=dca_result_message, btc_vs_results=btc_vs_results, ticker=ticker,
+                           start_date=stock_start_date_formatted, end_date=stock_end_date_formatted, amount=investment)
 
 
 if __name__ == "__main__":

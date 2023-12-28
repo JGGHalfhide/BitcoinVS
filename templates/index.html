@@ -121,16 +121,16 @@
                     <div class="d-flex justify-content-center">
                     <form id="btcvsform" action="{{ url_for('home') }}" method="post">
     <label for="inputValue1">Asset name:</label>
-    <input type="text" id="inputValue1" name="inputValue1" placeholder="Enter stock ticker" required><br>
+    <input type="text" id="inputValue1" name="inputValue1" placeholder="Enter stock ticker" value="{{ ticker }}" required><br>
 <br>
     <label for="inputValue3">Start date:</label>
-    <input type="date" id="inputValue3" name="inputValue3" min="2014-01-01" required><br>
+    <input type="date" id="inputValue3" name="inputValue3" min="2014-01-01" value = "{{ start_date }}" required><br>
     <br>
                         <label for="inputValue4">End date:</label>
-    <input type="date" id="inputValue4" name="inputValue4" min="2014-01-02" required><br>
+    <input type="date" id="inputValue4" name="inputValue4" min="2014-01-02" value = "{{ end_date }}" required><br>
     <br>
                         <label for="inputValue2">USD invested:</label>
-    <input type="text" id="inputValue2" name="inputValue2" pattern="[0-9]+" placeholder="Enter number only"required><br>
+    <input type="text" id="inputValue2" name="inputValue2" pattern="[0-9]+" placeholder="Enter number only" value = "{{ amount }}" required><br>
 <br>
                         <div class="text-center">
     <button type="submit" class="btn btn-secondary">Compare</button>
