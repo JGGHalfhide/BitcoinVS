@@ -46,6 +46,7 @@ def home():
     stock_end_date_formatted = ""  # Initialize variable for end date to keep a placeholder after user submits BTCvs
     # form
     investment = ""  # Initialize variable for investment amount to keep a placeholder after user submits BTCvs form
+    anchor_section = ""  # Initialize anchor variable for autoscroll to form section after submission
 
     # Get BTC data and create a default graph for BTC graphs section
     data = btc_data_to_graph()
@@ -57,19 +58,26 @@ def home():
         data = btc_data_to_graph(period="7d", interval="1d")
         fig = btc_graph(data, "7d")
         graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
+        interval = request.args.get('interval', default='weekly', type=str)
+        anchor_section = "#charts"
     elif interval == 'monthly':
         data = btc_data_to_graph(period="1y", interval="1mo")
         fig = btc_graph(data, "1y")
         graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
+        interval = request.args.get('interval', default='monthly', type=str)
+        anchor_section = "#charts"
     elif interval == 'all':
         data = btc_data_to_graph(period="10y", interval="1mo")
         fig = btc_graph(data, "10y")
         graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
+        interval = request.args.get('interval', default='all', type=str)
+        anchor_section = "#charts"
 
     if request.method == 'POST':
         if "searchTerm" in request.form:
             search_term = request.form.get('searchTerm')
             search_results = search_companies('static/csv/stocks.csv', search_term)
+            anchor_section = "#searchForm"
         elif "inputValue5" in request.form:
             start_date_str = request.form.get('inputValue5')
             end_date_str = request.form.get('inputValue6')
@@ -93,6 +101,7 @@ def home():
                     f"<strong>Total BTC:</strong> {round(shares_purchased, 6)}<br>"
                     f"<strong>ROI:</strong> {roi}%"
                 )
+                anchor_section = '#dcaForm'
             elif investment_frequency == '1d':
                 shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(daily_data_dict,
                                                                                            invested_amount)
@@ -102,6 +111,7 @@ def home():
                     f"<strong>Total BTC:</strong> {round(shares_purchased, 6)}<br>"
                     f"<strong>ROI:</strong> {roi}%"
                 )
+                anchor_section = '#dcaForm'
             elif investment_frequency == '1wk':
                 shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(weekly_data_dict,
                                                                                            invested_amount)
@@ -111,6 +121,7 @@ def home():
                     f"<strong>Total BTC:</strong> {round(shares_purchased, 6)}<br>"
                     f"<strong>ROI:</strong> {roi}%"
                 )
+                anchor_section = '#dcaForm'
             elif investment_frequency == '1mo':
                 shares_purchased, final_dollar_value, final_gain_or_loss, roi = dca_return(monthly_data_dict,
                                                                                            invested_amount)
@@ -120,6 +131,7 @@ def home():
                     f"<strong>Total BTC:</strong> {round(shares_purchased, 6)}<br>"
                     f"<strong>ROI:</strong> {roi}%"
                 )
+                anchor_section = '#dcaForm'
         elif "inputValue1" in request.form:
             ticker = request.form.get('inputValue1')
             stock_start_date_str = request.form.get('inputValue3')
@@ -146,11 +158,13 @@ def home():
                 f"Bitcoin's <strong>ROI</strong> was {results[1][2]}% vs {ticker}'s {results[0][2]}%<br>"
                 f"Bitcoin's <strong>final USD value</strong> was {results[1][0]} vs {ticker}'s {results[0][0]}"
             )
+            anchor_section = '#btcvsform'
 
     return render_template("index.html", current_price=current_price, graph_html=graph_html, articles=article_list,
                            search_results=search_results, get_stock_data=get_stock_data,
                            dca_result_message=dca_result_message, btc_vs_results=btc_vs_results, ticker=ticker,
-                           start_date=stock_start_date_formatted, end_date=stock_end_date_formatted, amount=investment)
+                           start_date=stock_start_date_formatted, end_date=stock_end_date_formatted, amount=investment,
+                           interval=interval, anchor_section=anchor_section)
 
 
 if __name__ == "__main__":
