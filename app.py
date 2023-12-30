@@ -1,9 +1,7 @@
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request
-import requests
-import os
 from functions import current_price, search_companies, get_stock_data, format_stock_data, dca_return, lump_sum, \
-    btc_data_to_graph, btc_graph
+    btc_data_to_graph, btc_graph, get_bitcoin_articles
 import plotly.io as pio
 
 app = Flask(__name__)
@@ -11,28 +9,8 @@ app = Flask(__name__)
 # get current BTC price for top of page
 current_price = current_price()
 
-# Get BTC data and create a graph for BTC graphs section
-# data = btc_data()
-# fig = btc_graph(data, "1d")
-# graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
-
-
 # get 3 bitcoin articles from the last 7 days
-current_date = datetime.now()
-one_month_ago = current_date - timedelta(days=7)
-formatted_date = one_month_ago.strftime('%Y-%m-%d')
-NEWS_KEY = os.environ.get("NEWS_KEY")
-news_url = f"https://api.marketaux.com/v1/news/all?search=bitcoin&filter_entities=true&published_after={formatted_date}&language=en&api_token={NEWS_KEY}"
-news_request = requests.get(url=news_url)
-news_data = news_request.json()
-article_list = []
-for article in news_data['data']:
-    article_dict = {
-        'title': article['title'],
-        'description': article['description'],
-        'link': article['url']
-    }
-    article_list.append(article_dict)
+article_list = get_bitcoin_articles()
 
 
 @app.route('/', methods=['GET', 'POST'])

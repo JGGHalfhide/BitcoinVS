@@ -1,9 +1,34 @@
 import csv
+import os
+import requests
 import yfinance as yf
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 import plotly.graph_objects as go
 
+
+# Get BTC articles from news API
+def get_bitcoin_articles():
+    current_date = datetime.now()
+    one_month_ago = current_date - timedelta(days=7)
+    formatted_date = one_month_ago.strftime('%Y-%m-%d')
+
+    NEWS_KEY = os.environ.get("NEWS_KEY")
+    news_url = f"https://api.marketaux.com/v1/news/all?search=bitcoin&filter_entities=true&published_after={formatted_date}&language=en&api_token={NEWS_KEY}"
+
+    news_request = requests.get(url=news_url)
+    news_data = news_request.json()
+
+    article_list = []
+    for article in news_data['data']:
+        article_dict = {
+            'title': article['title'],
+            'description': article['description'],
+            'link': article['url']
+        }
+        article_list.append(article_dict)
+
+    return article_list
 
 # Get BTC graph data function
 def btc_data_to_graph(period="1d", interval="1m"):
