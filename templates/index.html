@@ -67,14 +67,12 @@
                     <p class="lead fw-normal text-muted mb-5">See BTC charts for daily, weekly, monthly, and all-time price data.</p>
 
                     <!-- Toggle buttons for different intervals -->
-                    <!-- Toggle buttons for different intervals -->
 <div class="btn-group" role="group" aria-label="BTC Chart Toggle">
     <a href="/?interval=daily" class="btn {% if interval == 'daily' %}btn-primary{% else %}btn-secondary{% endif %}">Daily</a>
     <a href="/?interval=weekly" class="btn {% if interval == 'weekly' %}btn-primary{% else %}btn-secondary{% endif %}">Weekly</a>
     <a href="/?interval=monthly" class="btn {% if interval == 'monthly' %}btn-primary{% else %}btn-secondary{% endif %}">Monthly</a>
     <a href="/?interval=all" class="btn {% if interval == 'all' %}btn-primary{% else %}btn-secondary{% endif %}">All</a>
 </div>
-
 
                     <!-- Plotly graph section -->
                     <div id="btc-graph" style="width: 100%; max-width: 1500px; margin: 0 auto;">
@@ -109,7 +107,7 @@
 <!-- Display search results -->
 <div class="d-flex justify-content-center">
     {% if search_results %}
-        <ul>
+        <ul id="searchresult">
             {% for result in search_results %}
                 <li>{{ result["Company Name"] }} , ticker={{ result["Ticker"] }}</li>
             {% endfor %}
@@ -144,7 +142,7 @@
 <!-- Display BTCvs result message -->
 <div class="d-flex justify-content-center">
     {% if btc_vs_results %}
-        <div style="text-align: center; margin-top: 20px; background-color: #f5f5f5; padding: 20px;">
+        <div style="text-align: center; margin-top: 20px; background-color: #f5f5f5; padding: 20px;" id="btcvsresults">
             <h4 class="fw-bolder">Results for the given time period and investment:</h4>
             <p style="margin-top: 20px;">
                 {{ btc_vs_results | safe }}
@@ -195,7 +193,7 @@
 <!-- Display DCA result message -->
 <div class="d-flex justify-content-center">
     {% if dca_result_message %}
-        <div style="text-align: center; margin-top: 20px; background-color: #f5f5f5; padding: 20px;">
+        <div style="text-align: center; margin-top: 20px; background-color: #f5f5f5; padding: 20px;" id="dcaresults">
             <h4 class="fw-bolder">Results for the given time period and investment:</h4>
             <p style="margin-top: 20px;">
                 {{ dca_result_message | safe }}
@@ -257,20 +255,40 @@
             <!-- JavaScript to scroll to the BTCvs, dca, and graph form sections after submission -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        var btcvsForm = document.getElementById("btcvsform");
-        if (btcvsForm) {
-            btcvsForm.scrollIntoView({ behavior: 'instant' });
+        var searchresult = document.getElementById("searchresult");
+        if (searchresult) {
+        var bitcoinvs = document.getElementById("bitcoinvs");
+        if (bitcoinvs) {
+            bitcoinvs.scrollIntoView({ behavior: 'instant' });
+            }
         }
 
-        var dcaForm = document.getElementById("dcaform");
-        if (dcaForm) {
-            dcaForm.scrollIntoView({ behavior: 'instant' });
+        var dcaresults = document.getElementById("dcaresults");
+        if (dcaresults) {
+            var dcacalculator = document.getElementById("dcacalculator");
+        if (dcacalculator) {
+            dcacalculator.scrollIntoView({ behavior: 'instant' });
+            }
         }
+
+        var btcvsresults = document.getElementById("btcvsresults");
+        if (btcvsresults) {
         var searchForm = document.getElementById("searchForm");
         if (searchForm) {
             searchForm.scrollIntoView({ behavior: 'instant' });
+            }
         }
+        var toggleButtons = document.querySelectorAll('.btn-group a');
+    toggleButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            // Scroll to the #charts section
+            var chartsSection = document.getElementById("charts");
+            if (chartsSection) {
+                chartsSection.scrollIntoView({ behavior: 'instant' });
+            }
+        });
     });
+});
 </script>
 
     </body>
