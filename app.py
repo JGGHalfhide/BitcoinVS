@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask import Flask, render_template, request
 from functions import current_price, search_companies, get_stock_data, format_stock_data, dca_return, lump_sum, \
     btc_data_to_graph, btc_graph, get_bitcoin_articles
@@ -15,20 +15,15 @@ article_list = get_bitcoin_articles()
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    search_results = None  # Initialize search results
-    btc_vs_results = None  # Initialize the result of BTC vs form
-    dca_result_message = None  # Initialize the result of DCA
-    ticker = ""  # Initialize variable for ticker to keep a placeholder after user submits BTCvs form
-    stock_start_date_formatted = ""  # Initialize variable for start date to keep a placeholder after user submits
-    # BTCvs form
-    stock_end_date_formatted = ""  # Initialize variable for end date to keep a placeholder after user submits BTCvs
-    # form
-    investment = ""  # Initialize variable for investment amount to keep a placeholder after user submits BTCvs form
+    # Initialize variables
+    search_results, btc_vs_results, dca_result_message = None, None, None
+    ticker, stock_start_date_formatted, stock_end_date_formatted, investment = "", "", "", ""
 
     # Get BTC data and create a default graph for BTC graphs section
     data = btc_data_to_graph()
     fig = btc_graph(data, "1d")
     graph_html = pio.to_html(fig, include_plotlyjs=True, full_html=True)
+
     # Get the desired graph for the specified time interval
     interval = request.args.get('interval', default='daily', type=str)
     if interval == 'weekly':
