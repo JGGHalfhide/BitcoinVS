@@ -1,6 +1,6 @@
 # BitcoinVS Flask Web Application
 ![Screenshot 2023-12-26 at 8 07 09 PM](https://github.com/JGGHalfhide/BitcoinVS/assets/141737227/a14b986b-e87b-4ad0-a6ca-ea6ca4155018)
-BitcoinVS is a comprehensive web application built with Flask for backend operations and Bootstrap, HTML, CSS, and JavaScript for frontend development. The primary goal of the application is to provide users with insights into Bitcoin price trends, stock comparisons, investment scenarios, and the latest Bitcoin-related news. Visit the live website at [BitcoinVS.onrender.com](BitcoinVS.onrender.com).
+BitcoinVS is a comprehensive web application built with Flask for backend operations and Bootstrap, HTML, CSS, and JavaScript for frontend development. The primary goal of the application is to provide users with insights into Bitcoin price trends, stock comparisons, investment scenarios, and the latest Bitcoin-related news. Visit the live website at <https://BitcoinVS.onrender.com>.
 
 ## Features:
 
