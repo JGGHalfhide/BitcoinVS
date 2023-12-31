@@ -18,15 +18,21 @@ def get_bitcoin_articles():
 
     news_request = requests.get(url=news_url)
     news_data = news_request.json()
+    print(news_data)
 
     article_list = []
-    for article in news_data['data']:
-        article_dict = {
-            'title': article['title'],
-            'description': article['description'],
-            'link': article['url']
-        }
-        article_list.append(article_dict)
+
+    # Check if 'data' key exists in the response
+    if 'data' in news_data:
+        for article in news_data['data']:
+            article_dict = {
+                'title': article.get('title', ''),
+                'description': article.get('description', ''),
+                'link': article.get('url', '')
+            }
+            article_list.append(article_dict)
+    else:
+        print("Data key not found in the API response.")
 
     return article_list
 
