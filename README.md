@@ -44,7 +44,7 @@ BitcoinVS is a comprehensive web application built with Flask for backend operat
 
 ## Usage:
 
-1.	Access the live application through the URL BitcoinVS.onrender.com.
+1.	Access the live application through the URL BitcoinVS.onrender.com. Please note, render's free hosting tier disables the site when not accessed for 15 or more minutes. Therefore, if your request times out, please simply refresh the page and allow it to load. 
 2.	Navigate through the various sections to explore Bitcoin price trends, stock comparisons, investment scenarios, and the latest news.
 3.	Follow on-screen instructions and prompts to interact with different features and functionalities of the hosted application.
 
